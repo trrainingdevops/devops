@@ -7,3 +7,162 @@ link: https://docs.github.com/en/authentication/connecting-to-github-with-ssh/ge
 
 
 last line
+    1  ifconfig
+    2  ipconfig
+    3  ifconfig
+    4  mkdir project
+    5  ls
+    6  ls -l
+    7  cd 
+    8  cd -help
+    9  cd --help
+   10  cd project/
+   11  pwd
+   12  ls
+   13  git clone git@github.com:trrainingdevops/devops.git
+   14  clear
+   15  ssh-keygen -t rsa -b 4096 -C "trrainingdevops@gmail.com"
+   16  cd /home/ubuntu/.ssh
+   17  pwd
+   18  ls
+   19  cat id_rsa.pub 
+   20  ls
+   21  cd
+   22  pwd
+   23  ls
+   24  cd project/
+   25  git clone git@github.com:trrainingdevops/devops.git
+   26  ls
+   27  ls -l
+   28  cd devops/
+   29  pwd
+   30  ls -l
+   31  cat README.md 
+   32  ls
+   33  pwd
+   34  git branch
+   35  git create
+   36  git checkout -b first-branch
+   37  git branch
+   38  git checkout main
+   39  git branch
+   40  ls
+   41  vi training.txt
+   42  ls
+   43  ls -l
+   44  cat training.txt 
+   45  git branch
+   46  ls
+   47  git branch
+   48  git add training.txt 
+   49  cd
+   50  git init
+   51  cd .git/
+   52  ls
+   53  cat config
+   54  cd -
+   55  cd project/
+   56  ls
+   57  cd devops/
+   58  ls
+   59  git branch
+   60  git status
+   61  git commit -m "first commit"
+   62  git status
+   63  git push 
+   64  git branch
+   65  git repo
+   66  git remote -v
+   67  git branch
+   68  git status
+   69  git log
+   70  git log --pretty
+   71  git log --help
+   72  git log –graph –pretty
+   73  git log –graph –pretty=”%h” –date=short
+   74  git log –graph –pretty="%h" –date=short
+   75  git log –graph–pretty="%h" –date=short
+   76  git log
+   77  git branch
+   78  git checkout -b feature/training-docs
+   79  git branch
+   80  ls
+   81  git branch
+   82  ls
+   83  vi training.txt 
+   84  cat training.txt 
+   85  git add training.txt 
+   86  git status
+   87  git commit -m "updated docs"
+   88  git status
+   89  git push
+   90  git push origin feature/training-docs
+   91  git branch
+   92  git status
+   93  git log
+   94  git revert ad2dd09c760634f0c2cf18ca2848374874465089
+   95  git branch
+   96  git checkout main
+   97  git branch -d feature/training-docs
+   98  git branch -D feature/training-docs
+   99  git branch
+  100  git checkout main
+  101  git status
+  102  cat training.txt 
+  103  git status
+  104  git branch
+  105  git stash
+  106  git checkout main
+  107  git merge
+  108  git add training.txt 
+  109  git checkout main
+  110  git branch
+  111  git branch -d feature/training-docs
+  112  git branch -D feature/training-docs
+  113  git push
+  114  git push origin feature/training-docs
+  115  git branch -d
+  116  git branch
+  117  git push origin -d feature/training-docs
+  118  ls
+  119  git branch
+  120  git checkout first-branch
+  121  ls
+  122  vi testing.txt
+  123  ls
+  124  git add . ; git commit -m "testing first branch" ; git push origin first-branch
+  125  ls
+  126  vi training.txt
+  127  ls
+  128  git add . ; git commit -m "adding training file" ; git push origin first-branch
+  129  git checkout main
+  130  ls
+  131  git pull --all
+  132  git diff
+  133  git branch
+  134  ls
+  135  vi training.txt 
+  136  git add . ; git commit -m "adding text" ; git push
+  137  git branch
+  138  git checkout first-branch
+  139  ls
+  140  cat training.txt 
+  141  git checkout main
+  142  git pull --all
+  143  git checkout first-branch
+  144  cat training.txt 
+  145  git fetch origin main
+  146  cat training.txt 
+  147  git merge origin main
+  148  cat training.txt 
+  149  git checkout main
+  150  ls
+  151  touch suhel
+  152  git add . ; git commit -m "empty file" ; git push
+  153  ls
+  154  git branch
+  155  git checkout first-branch
+  156  touch empty
+  157  git add . ;git commit -m "empty file" ; git push origin first-branch
+  158  history 
+  159  history >> training.txt 

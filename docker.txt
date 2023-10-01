@@ -1,0 +1,125 @@
+Symantec versioning:
+https://github.com/marketplace/actions/git-semantic-version
+https://semver.org/
+
+
+
+1. Docker:
+
+Command : docker
+
+Install on ubuntu:
+https://docs.docker.com/engine/install/ubuntu/
+
+# Add Docker's official GPG key:
+sudo apt-get update
+sudo apt-get install ca-certificates curl gnupg
+sudo install -m 0755 -d /etc/apt/keyrings
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+sudo chmod a+r /etc/apt/keyrings/docker.gpg
+
+# Add the repository to Apt sources:
+echo \
+  "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+  "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" | \
+  sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+sudo apt-get update
+
+
+sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+
+
+Check Version:
+docker --version
+
+Check images:
+docker images
+
+check containers:
+sudo docker ps
+
+stopped container check:
+sudo docker ps -a
+
+run ubuntu:
+docker run -it -d ubuntu:latest
+
+
+check container  and images.
+
+Lets dive into the container:
+
+docker exec -it containerID /bin/bash
+
+
+Stop the container:
+docker ps 
+docker ps -a
+
+Remove images:
+docker images
+docker rmi imagename
+
+
+Save change to container:
+docker exec -it -d ubuntu
+docker exec -it containerID /bin/bash
+apt-get update
+apt-get install apache2
+touch suhel.txt
+exit container
+
+Commit
+sudo docker ps
+sudo docker commit ContainerID repo/newimagename
+
+push to docker:
+sudo docker login
+
+docker push repo/newimagename
+
+
+
+Dockerfile:
+mkdir docker
+
+
+
+
+index.html
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Example</title>
+    </head>
+    <body>
+        <p>Hello DevOps.</p>
+    </body>
+</html>
+
+
+
+vi Dockerfile:
+FROM ubuntu:latest
+RUN apt-get update -y
+RUN apt-get -y install apache2
+ADD . /var/www/html
+ENV name DevOps
+ENTRYPOINT apachectl -D FOREGROUND
+
+
+
+Build Dockerfile:
+sudo docker build -t repo/imagename:1.0.0 -f Dockerfile .
+
+sudo docker images
+sudo docker run -it -p 81:80 -d repo/imagename:1.0.0
+
+check env variable:
+sudo docker exec -it ContainerID bash
+env
+
+
+
+

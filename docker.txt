@@ -73,6 +73,11 @@ Commit
 sudo docker ps
 sudo docker commit ContainerID repo/newimagename
 
+
+
+Docker hub config:
+https://hub.docker.com/
+
 push to docker:
 sudo docker login
 
@@ -122,4 +127,162 @@ env
 
 
 
+
+Docker storage:
+
+- docker volume
+- bind mount
+
+docker volume create my-vol
+
+mount:
+docker run -it --mount source=<source=folder>,destination=<destination-folder> -d <container-name>
+
+example:
+docker run -it --mount source=my-vol,destination=/app -d ubuntu
+
+
+bind mount:
+docker run -it –v /home/ubuntu/hello:/app -d ubuntu
+
+
+Linking:
+$ docker run –it –name <name-of-container> --link <container-name> -d ubuntu
+
+docker run -it --name container1 -d ubuntu
+
+docker run -it --name container2 -d ubuntu --link container1
+
+docker exec –it container2 bash
+sudo apt-get update
+apt-get install iputils-ping
+ping container1
+
+
+
+
+Monolithic vs microservices:
+
+
+
+
+Dockerfile:
+
+
+
+
+Additional:
+
+
+
+Docker compose:
+
+
+install docker compose:
+sudo curl -L "https://github.com/docker/compose/releases/download/1.23.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+
+sudo chmod +x /usr/local/bin/docker-compose
+
+docker-compose --version
+
+vi docker-compose.yml
+
+version: '3'
+services:
+  sample1:
+    image: httpd
+    ports:
+    - "5000:5000"
+  sample2:
+    image: nginx
+  
+
+
+docker-compose up -d
+
+docker ps
+
+
+
+
+
+Wordpress:
+
+docker-compose.yaml
+
+version: '3.3'
+services:
+  db:
+    image: mysql:5.7
+    volumes:
+      - db_data:/var/lib/mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: somewordpress
+      MYSQL_DATABASE: wordpress
+      MYSQL_USER: wordpress
+      MYSQL_PASSWORD: wordpress
+  wordpress:
+    depends_on:
+      - db
+    image: wordpress:latest
+    ports:
+      - "8000:80"
+    restart: always
+    environment:
+      WORDPRESS_DB_HOST: db:3306
+      WORDPRESS_DB_USER: wordpress
+      WORDPRESS_DB_PASSWORD: wordpress
+  volumes:
+    db_data:
+    
+    
+Docker-orachestration / Docker-swarm:
+
+
+docker swarm init --advertise-addr=<ip-address-of-leader>
+
+
+
+Services:
+Creating a Service
+docker service create --name <name-of-service> --replicas <number-of-replicas> <image-name>
+
+docker service create --name apache --replicas 3 -p 80:80 hshar/webapp
+
+Docker Network:
+ - bridge
+ - host
+ - overlay
+ - macvlan
+ - none
+
+
+Docker CLI:
+https://docs.docker.com/engine/reference/commandline/docker/
+
+
+
+
+
+
+Questions: 
+
+
+1. What is Docker ?
+2. Difference between virtualisation and containerisation ?
+3. Difference between RUN, CMD and Entrypoint
+4. What if application has error, how do you troubleshoot ?
+5. Without running a container , how do you troubleshoot image ?
+6. What the best practice for docker file ?
+   - never run as root user instead use a svc user with enough privilege
+   - bare minimal build-essential pkg only
+   - application run time libraries and binaries only
+   - remove all unnecessary tools from binaries
+   - Secure image with NO critical and high vunls
+7. How to check docker image vunls ? 
+8. What is multi layer docker image ?
+   
+
+   
 

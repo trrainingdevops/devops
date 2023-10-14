@@ -1,0 +1,355 @@
+Method1 :
+Using Kubeadm:
+
+There are two scripts under kubernetes/installation/kubeadm:
+  - common.sh  : run on all nodes
+  - master.sh  : run on only master node
+
+
+download the shell script and give the permission as below and run:
+Login to all the nodes (master and worker) and run common.sh:
+chmod +x common.sh
+sh common.sh
+
+once you run on all the nodes run below on only master node:
+chmod +x master.sh
+sh master.sh
+
+Copy the `kubeadm join` command and run on all the worker nodes with sudo:
+kubeadm join IpAddressOfMaster:6443 --token $token --discovery-token-ca-cert-hash sha256:$hash
+
+
+### you will find a kubeadm join command here in the output which you can run on any machine make that as a worker node ###
+###   kubeadm join <control-plane-host>:<control-plane-port> --token <token> --discovery-token-ca-cert-hash sha256:<hash>  ###
+
+### If you do not have the token, you can get it by running the following command on the control-plane node: ###
+### kubeadm token list ###
+### By default, tokens expire after 24 hours. If you are joining a node to the cluster after the current token has expired,
+### you can create a new token by running the following command on the control-plane node: ###
+### kubeadm token create ###
+
+### if you don't have the value of --discovery-token-ca-cert-hash, you can get it by running the following command chain on the control-plane node:
+### openssl x509 -pubkey -in /etc/kubernetes/pki/ca.crt | openssl rsa -pubin -outform der 2>/dev/null | openssl dgst -sha256 -hex | sed 's/^.* //'
+
+
+or you can generate a new command with below:
+sudo kubeadm token create --print-join-command
+
+
+By Checking API status we will know if our cluster is working fine or not:
+
+kubectl get --raw='/readyz?verbose'
+
+
+Method 2:
+Installation using kind.
+There is a script under kubernetes/installation/kind :
+ - kind-cluster.sh
+
+Download that and do the following:
+
+chmod +x kind-cluster.sh
+sh kind-cluster.sh
+
+
+
+Once Installation is done check the nodes:
+
+kubectl get nodes
+
+We can see control-plane and worker nodes. We can even update the labels:
+kubectl label node <node-name> node-role.kubernetes.io/worker=worker1
+
+
+
+kind: kind of resources
+apiVersion: supported version of api (v1, apps/v1)
+metadata: An object containing:
+name: Required if generateName is not specified. The name of this pod. It must be an RFC1035 compatible value and be unique within the namespace.
+labels: Optional. Labels are arbitrary key:value pairs that can be used by Deployment and services for grouping and targeting pods.
+generateName: Required if name is not set. A prefix to use to generate a unique name. Has the same validation rules as name.
+namespace: Required. The namespace of the pod.
+annotations: Optional. A map of string keys and values that can be used by external tooling to store and retrieve arbitrary metadata about objects.
+spec: The pod specification. See The spec schema for details.
+
+
+
+Check the Namespace:
+kubectl get namespace
+
+Get all the reousrces in Namespace:
+kubectl get all -n kube-system
+
+Create a Namespace:
+kubectl create namespace devops
+
+Run a application:
+kubectl run my-nginx --image=nginx --replicas=2 --port=80
+kubectl get pods
+kubectl get deployments
+
+kubectl expose deployment my-nginx --port=80 --type=LoadBalancer
+kubectl get services
+
+
+kubectl delete deployment my-nginx
+
+
+
+
+
+Deployment:
+
+Step 1:  Create a file, nginx.yaml and enter the following code
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+  labels:
+    app: nginx
+spec:
+ replicas: 3
+ selector:
+  matchLabels:
+    app: nginx
+ template:
+  metadata:
+    labels:
+      app: nginx
+  spec:
+   containers:
+     - name: nginx
+       image: nginx:1.7.9
+       ports:
+         - containerPort: 80
+
+
+Create the deployment using the following command:
+kubectl create -f nginx.yaml -n $namespace
+
+
+Verify the procedure, by listing the pods:
+kubectl get pod
+
+
+Describe the resource
+kubectl describe deployment $deploymentname
+kubectl describe pod $podname
+
+
+Verify the replica counts:
+kubectl get replicaset
+kubectl describe replicaset $replicasetname
+
+
+Create a Yaml from resources:
+kubectl get deployment $deploymentname
+kubectl get deployment $deploymentname -o yaml
+kubectl get deployment $deploymentname -o yaml >> deployment.yaml
+
+
+check logs for pod:
+kubectl logs $podname
+
+if multiple container within the pod:
+kubectl logs $podname --container $yourcontainername
+
+
+check logs with labels:
+kubectl logs -l app=nginx
+
+check logs with selector:
+kubectl logs --selector app=nginx
+
+
+
+Check events:
+kubectl get events
+
+
+
+Multi-containers:
+
+multicontainer.yaml
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+  labels:
+    app: nginx
+spec:
+ #replicas: 3
+  containers:
+    - name: container1
+      image: ubuntu
+      command: ["/bin/bash", "-c",
+       "while true; do echo Hello-Coder; sleep 5 ; done"]
+    - name : container2
+      image: ubuntu
+      command: ["/bin/bash', "-c" ,
+      "while true; do echo Hello-Programmer; sleep 5 ; done"]
+
+
+
+
+Service:
+kubectl create service nodeport <name-of-service> --tcp=<port-of-service>:<port-of-container>
+
+kubectl create service nodeport nginx --tcp 80:80
+
+kubectl get svc
+
+kubectl describe svc nginx
+
+Our application must be accessible now:
+IPaddress:NodePort
+
+
+
+Ingress:
+
+Check the supported version here:
+https://github.com/kubernetes/ingress-nginx
+
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/cloud/deploy.yaml
+
+
+ingress.yaml
+
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+ name: simple-fanout-example
+ annotations:
+ nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+ rules:
+ - http:
+    paths:
+    - path: /foo
+      backend:
+       serviceName: nginx
+       servicePort: 80
+
+
+kubectl create –f ingress.yaml
+
+kubectl get ingress
+
+Finally verify by browing to https://<IP-address-of-master or slave>:<nodeport>/nginx
+
+
+
+Kubernetes Dashboard:
+kubectl create -f https://raw.githubusercontent.com/kubernetes/dashboard/master/aio/deploy/recommended/kubernetesdashboard.yaml
+kubectl -n kube-system edit service kubernetes-dashboard
+
+kubectl create serviceaccount cluster-admin-dashboard-sa
+kubectl create clusterrolebinding cluster-admin-dashboard-sa --clusterrole=cluster-admin --serviceaccount=default:cluster-admin-dashboard-sa
+
+TOKEN=$(kubectl describe secret $(kubectl -n kube-system get secret | awk '/^cluster-admin-dashboard-satoken-/{print $1}') | awk '$1=="token:"{print $2}')
+
+
+
+
+
+Accessing cluster from outside:
+mkdir .kube
+cd .kube/
+vi config
+
+copy paste the config from master
+
+kubectl config get-context
+
+
+Learn helm:
+
+https://helm.sh/docs/
+
+
+Prometheus:
+
+helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+helm repo update
+helm install prometheus prometheus-community/kube-prometheus-stack
+
+
+
+Grafana:
+helm repo add grafana https://grafana.github.io/helm-charts
+helm repo update
+
+
+helm install grafana grafana/grafana-agent-operator
+
+
+
+
+
+
+Extra:
+Storage:
+  - storageclass
+  - Persistent volumeMounts
+  - persistent volumeclaim
+
+Environment Properties:
+  - configmap
+
+Secret:
+  - secret
+
+Authentication and permissions:
+  - RBAC (Role based access control)
+  - clusterrole
+  - clusterrolebinding
+  - Role
+  - RoleBinding
+  - Serviceaccount
+
+AutoScaling:
+  - hpa (Horizontal Pod Autoscaling) : Commonly used
+  - vpa (Vertical Pod AutoScaling)
+      - Tools:
+        - Karpenter
+        - KEDA
+
+AutoSchedule Job:
+  - Cronjob
+  - Job
+
+All deployment type:
+  - Deployment
+  - Statefulset
+  - daemonset
+
+Multi-tenancy:
+  - Network Policies
+
+Health check:
+  - Probes:
+    - LivenessProbe
+    - ReadinessProbe
+    - Statrtup Probes
+
+Resource Control:
+  - Resources:
+    - limits
+    - requests
+  - ReosourceQuotas
+
+
+Port in Services:
+ - NodePort
+ - ClusterIP
+ - LoadBalancer
+
+
+
+
+
+
+

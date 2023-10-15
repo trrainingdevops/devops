@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hello-deployment
+spec:
+  selector:
+    matchLabels:
+      app: hello
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: hello
+    spec:
+      volumes:
+        - name: hello-pv
+          persistentVolumeClaim:
+            claimName: hello-pv-claim
+      containers:
+      - name: hello
+        image: karthequian/helloworld:latest
+        env:
+          - name: PLAYER_INITIAL_LIVES
+            valueFrom:
+              configMapKeyRef:
+                name: hello-cm
+                key: player_initial_lives
+          - name: SECRET_USERNAME
+            valueFrom:
+              secretKeyRef:
+                name: hello-secret
+                key: username
+          - name: SECRET_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: hello-secret
+                key: password
+        resources:
+          limits:
+            cpu: "0.5"
+            memory: "256Mi"
+          requests:
+            cpu: "0.25"
+            memory: "128Mi"
+        ports:
+          - containerPort: 80
+        volumeMounts:
+          - mountPath: "/usr/share/hello/html"
+            name: hello-pv
+        readOnly: true
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 5
+          periodSeconds: 5

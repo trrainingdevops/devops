@@ -213,32 +213,37 @@ Ingress:
 Check the supported version here:
 https://github.com/kubernetes/ingress-nginx
 
-kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/cloud/deploy.yaml
+
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.9.3/deploy/static/provider/cloud/deploy.yaml
+
+kubectl delete -A ValidatingWebhookConfiguration ingress-nginx-admission
 
 
 ingress.yaml
 
-apiVersion: extensions/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
- name: simple-fanout-example
- annotations:
- nginx.ingress.kubernetes.io/rewrite-target: /
+  name: example-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /$1
 spec:
- rules:
- - http:
-    paths:
-    - path: /foo
-      backend:
-       serviceName: nginx
-       servicePort: 80
+  rules:
+    - host: hello-world.info
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: nginx-service
+                port:
+                  number: 80
 
 
 kubectl create –f ingress.yaml
 
 kubectl get ingress
-
-Finally verify by browing to https://<IP-address-of-master or slave>:<nodeport>/nginx
 
 
 

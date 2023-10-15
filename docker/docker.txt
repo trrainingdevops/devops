@@ -53,7 +53,7 @@ docker exec -it containerID /bin/bash
 
 
 Stop the container:
-docker ps 
+docker ps
 docker ps -a
 
 Remove images:
@@ -195,7 +195,7 @@ services:
     - "5000:5000"
   sample2:
     image: nginx
-  
+
 
 
 docker-compose up -d
@@ -235,8 +235,8 @@ services:
       WORDPRESS_DB_PASSWORD: wordpress
   volumes:
     db_data:
-    
-    
+
+
 Docker-orachestration / Docker-swarm:
 
 
@@ -266,7 +266,7 @@ https://docs.docker.com/engine/reference/commandline/docker/
 
 
 
-Questions: 
+Questions:
 
 
 1. What is Docker ?
@@ -280,9 +280,9 @@ Questions:
    - application run time libraries and binaries only
    - remove all unnecessary tools from binaries
    - Secure image with NO critical and high vunls
-7. How to check docker image vunls ? 
+7. How to check docker image vunls ?
 8. What is multi layer docker image ?
-   
 
-   
+
+
 

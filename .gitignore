@@ -1,0 +1,29 @@
+# Maven
+/target
+
+# IntelliJ
+/.idea
+/src/main/webapp/WEB-INF/classes
+/src/main/webapp/WEB-INF/lib
+*.iml
+# Eclipse project files
+/.settings
+/.classpath
+/.project
+/.springBeans
+/.externalToolBuilders
+
+# Visual Studio Code files
+.vscode
+.factorypath
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+

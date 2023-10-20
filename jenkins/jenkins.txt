@@ -1,0 +1,71 @@
+1. install all the tools tools/ubuntu-tools.sh
+
+Docs:
+https://www.jenkins.io/doc/book/installing/linux/
+
+
+2. Install JDK:
+
+sudo apt update
+sudo apt install fontconfig openjdk-17-jre -y
+java -version
+
+
+3. Install Jenkis:
+sudo wget -O /usr/share/keyrings/jenkins-keyring.asc https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key
+echo deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] https://pkg.jenkins.io/debian-stable binary/ | sudo tee /etc/apt/sources.list.d/jenkins.list > /dev/null
+sudo apt-get update
+sudo apt-get install jenkins -y
+sudo systemctl enable jenkins
+sudo systemctl start jenkins
+sudo systemctl status jenkins
+
+4. Download Maven:
+sudo apt update
+sudo apt install maven -y
+mvn -version
+
+
+4. Setup Java HOme path:
+
+JAVA_HOME='/usr/lib/jvm/java-17-openjdk-amd64'
+PATH="$JAVA_HOME/bin:$PATH"
+export PATH
+
+
+
+Access the Jenkins Via public IP:
+#Public_IP:8080
+
+get the Admin password from here:
+sudo cat /var/lib/jenkins/secrets/initialAdminPassword
+
+Enter the Token and Login
+
+After login : Install Suggested Plugin
+
+
+Setup first user
+
+Save and finish with Jenkins URL:
+http://$Public_Ip:8080/
+
+
+Enable JNLP :
+
+Go To Manage Jenkins -> Security -> Agents -> Select Random
+
+
+Add First slave node:
+Manage Jenkins -> Node -> New-Node -> slave : permanent Node -> Remove-Root Directory (/home/ubuntu/jenkins) : Custom work-dir (/home/ubuntu/jenkins): Save
+
+
+Get the command from node:
+run the agent.jar command as backgroup
+command &
+
+
+Jenkins Pipeline:
+
+https://www.perforce.com/manuals/jenkins/Content/P4Jenkins/variable-expansion.html
+

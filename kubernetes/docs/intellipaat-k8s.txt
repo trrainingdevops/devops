@@ -73,6 +73,12 @@ annotations: Optional. A map of string keys and values that can be used by exter
 spec: The pod specification. See The spec schema for details.
 
 
+Check context:
+kubectl config current-context
+
+change k8s cluster context:
+kubectl config use-context kind-kind
+
 
 Check the Namespace:
 kubectl get namespace
@@ -248,8 +254,7 @@ kubectl get ingress
 
 
 Kubernetes metrics server:
-helm repo add metrics-server https://kubernetes-sigs.github.io/metrics-server/
-helm upgrade --install metrics-server metrics-server/metrics-server -n kube-system
+kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
 
 
 Kubernetes Dashboard:

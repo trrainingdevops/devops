@@ -29,7 +29,7 @@ pipeline {
            script {
             sh """
             cd devops-dummy-apps/maven/demo
-            sudo docker build -t ${IMAGE}:${VERSION} .
+            docker build -t ${IMAGE}:${VERSION} .
             """
           }
         }
@@ -38,7 +38,7 @@ pipeline {
         steps {
            script {
             sh """
-            sudo docker run -it -d -p 8080:8080 ${IMAGE}:${VERSION}
+            docker run -it -d -p 8080:8080 ${IMAGE}:${VERSION}
             """
           }
         }

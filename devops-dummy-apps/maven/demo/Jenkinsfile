@@ -38,7 +38,7 @@ pipeline {
         steps {
            script {
             sh """
-            sudo docker run -it -d -p 8080:8080 ${IMAGE}:${VERSION}
+            sudo docker run -it -d -p 8081:8080 ${IMAGE}:${VERSION}
             """
           }
         }

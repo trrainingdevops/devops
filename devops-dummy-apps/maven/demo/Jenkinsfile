@@ -29,7 +29,7 @@ pipeline {
            script {
             sh """
             cd devops-dummy-apps/maven/demo
-            echo "Pass123$" | sudo docker build -t ${IMAGE}:${VERSION} .
+            sudo docker build -t ${IMAGE}:${VERSION} .
             """
           }
         }
@@ -38,7 +38,7 @@ pipeline {
         steps {
            script {
             sh """
-            echo "Pass123$" | sudo docker run -it -d -p 8080:8080 ${IMAGE}:${VERSION}
+            sudo docker run -it -d -p 8080:8080 ${IMAGE}:${VERSION}
             """
           }
         }

@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-       IMAGE = "reponame"
+       IMAGE = "maven-app"
        VERSION = "1.0.${env.BUILD_ID}"
     }
 
@@ -24,5 +24,24 @@ pipeline {
           }
         }
       }
-    }
+      stage('Docker build'){
+        steps {
+           script {
+            sh """
+            cd devops-dummy-apps/maven/demo
+            docker build -t ${IMAGE}:${VERSION} .
+            """
+          }
+        }
+      }
+      stage('Docker run'){
+        steps {
+           script {
+            sh """
+            docker run -it -d -p 8080:8080 ${IMAGE}:${VERSION}
+            """
+          }
+        }
+      }
+  }
 }

@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-       IMAGE = "maven-app"
+       IMAGE = "maven-hello"
        VERSION = "1.0.${env.BUILD_ID}"
     }
 
@@ -30,6 +30,16 @@ pipeline {
             sh """
             cd devops-dummy-apps/maven/demo
             sudo docker build -t ${IMAGE}:${VERSION} .
+            sudo docker images
+            """
+          }
+        }
+      }
+      stage('Docker Images'){
+        steps {
+           script {
+            sh """
+            sudo docker images
             """
           }
         }

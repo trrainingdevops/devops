@@ -34,11 +34,20 @@ pipeline {
           }
         }
       }
-      stage('Docker run'){
+      stage('deployment dev'){
         steps {
            script {
             sh """
             sudo docker run -it -d -p 8081:8080 ${IMAGE}:${VERSION}
+            """
+          }
+        }
+      }
+      stage('deployment stage'){
+        steps {
+           script {
+            sh """
+            sudo docker run -it -d -p 8082:8080 ${IMAGE}:${VERSION}
             """
           }
         }

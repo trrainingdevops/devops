@@ -63,6 +63,13 @@ sudo apt update
 sudo apt install ansible -y
 ansible --version
 
+
+## AWS CLI
+curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+unzip awscliv2.zip
+sudo ./aws/install
+
+
 ### Check version ###
 echo "git version is: "
 git --version
@@ -76,3 +83,5 @@ echo "ansible version is: "
 ansible --version | grep core
 echo "kind version is: "
 kind version | awk -F ' ' '{print $2}'
+echo "aws version is: "
+aws --version | awk -F ' ' '{print $1}'

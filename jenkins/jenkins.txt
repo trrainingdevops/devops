@@ -69,3 +69,55 @@ Jenkins Pipeline:
 
 https://www.perforce.com/manuals/jenkins/Content/P4Jenkins/variable-expansion.html
 
+
+
+
+Dummy Pipeline:
+pipeline {
+    agent any
+    stages {
+        stage('Build') {
+            steps {
+                // Build the application
+                sh 'mvn clean install'
+            }
+        }
+        stage('Test') {
+            steps {
+                // Run the tests
+                sh 'mvn test'
+            }
+        }
+        stage('Deploy') {
+            steps {
+                // Deploy the application
+                sh 'deploy.sh'
+            }
+        }
+    }
+}
+
+
+
+Enabling Sudo without password for jenkins user for docker run on local:
+usermod -aG sudo jenkins
+
+Add this in /etc/sudoers
+jenkins ALL=(ALL) NOPASSWD: ALL
+
+Update this with NOPASSWD
+%sudo	ALL=(ALL:ALL) NOPASSWD: ALL
+
+
+
+Github Webhook:
+
+Run this on your local
+ssh -R 80:localhost:8080 serveo.net
+
+It will give you a url to access your local jenkins over the internet.
+
+add the webhook:
+
+github repo -> settings -> webhook ->
+  -  enter the payload url:  https://$servohash.serveo.net/github-webhook/

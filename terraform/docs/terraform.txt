@@ -1,0 +1,41 @@
+What is IAC.
+
+Terraform:
+ - init
+ - plan
+ - apply
+
+Check:
+ - fmt
+ - validate
+ - show
+
+
+
+ Create AWS secret Key and Access:
+
+IAM -> Users -> Create User -> Name -> Next -> Attach Policy -> AdministratorAccess -> Create
+
+Now Go To user and create secret access key:
+Createaccess key -> CLI -> Create Access Key
+
+Download CSV File.
+
+Install AWS CLI.
+
+run below:
+aws configure
+
+check:
+aws sts get-caller-identity
+
+create terraform manifest and run below:
+
+terraform init
+terraform plan
+terraform apply
+terraform destroy
+
+Command with TFVARS:
+terraform plan --var-file=terraform.tfvars
+

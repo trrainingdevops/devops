@@ -1,0 +1,118 @@
+Install Ansible:
+### Ansible ###
+sudo apt-add-repository ppa:ansible/ansible -y
+sudo apt update
+sudo apt install ansible -y
+ansible --version
+
+
+## Install Python if not already installed##
+sudo apt update
+sudo apt install software-properties-common
+sudo add-apt-repository ppa:deadsnakes/ppa
+sudo apt update
+sudo apt install python3
+
+
+SSH ACCESS on target machine from ansible master:
+
+Copy the public key from ansible master to target machine
+
+On Master:
+
+Run below:
+ssh-keygen
+
+then check the pub file:
+/home/ubuntu/.ssh
+
+Eg: id_rsa.pub
+
+Copy the content of pub file and paster it on Target machine
+
+On Target machine:
+/home/ubuntu/.ssh/authorized_keys
+
+
+Try Login from master now:
+ssh username@public-Ip-of-Target-Host
+
+
+Now add those target machine on Master hosts config:
+
+/etc/ansible/hosts
+
+add dev group:
+
+[dev]
+host1 ansible_ssh_host=PubliC-Ip-Of-Target-Host
+
+
+Now Lets test the ping:
+
+ansible -m ping dev
+
+
+Lets check the playbook dry run:
+
+ansible-playbook playbook.yaml --check
+
+
+
+You can also use custom inventory:
+
+inventory.cfg
+
+[web]
+host1 ansible_ssh_host=PubliC-Ip-Of-Target-Host
+
+
+Command with Invenotry:
+ansible-playbook -i inventory.cfg playbook.yaml
+
+
+
+Roles:
+
+
+cd /etc/ansible/roles
+
+create empty roles format:
+ansible-galaxy init apache --offline
+
+Check the tree:
+sudo apt-get install tree
+
+
+Task on slave now:
+
+install apache  -  install.yaml
+copy html file  - config.yaml
+restart apache service  - service.yaml
+
+
+
+On Master:
+ca /etc/ansible/roles
+ansible-galaxy init web --offline
+
+
+cd web/tasks
+
+Configure the main.yaml
+
+
+
+lets configure the sites.yaml
+
+cd /etc/ansible
+
+vi sites.yaml
+
+
+lets do the syntax check:
+
+ansible-playbook sites.yaml --syntax-check
+
+dry run
+ansible-playbook sites.yaml --check

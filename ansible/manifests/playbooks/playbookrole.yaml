@@ -1,0 +1,13 @@
+---
+- hosts: dev
+  become: true
+  debugger: on_failed
+  tasks:
+    - debug:
+        msg: "we run our role"
+    - import_role:
+        name: web
+    - include_role:
+        name: web
+    - debug:
+        msg: "we ran our role"

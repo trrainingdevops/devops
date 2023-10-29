@@ -1,0 +1,7 @@
+---
+  - name: install apache2
+    become: true
+    apt:
+      name: "{{ apache_package }}"
+      update_cache: yes
+      state: latest

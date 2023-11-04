@@ -1,0 +1,130 @@
+### Install java ####
+
+sudo apt update
+sudo apt install fontconfig openjdk-11-jdk -y
+java -version
+
+
+## Install elasticsearch
+wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch | sudo gpg --dearmor -o /usr/share/keyrings/elasticsearch-keyring.gpg
+sudo apt-get install apt-transport-https -y
+echo "deb [signed-by=/usr/share/keyrings/elasticsearch-keyring.gpg] https://artifacts.elastic.co/packages/8.x/apt stable main" | sudo tee /etc/apt/sources.list.d/elastic-8.x.list
+sudo apt-get update && sudo apt-get install elasticsearch -y
+
+## Install Kibana, Logstash and filebeat
+sudo apt-get install kibana logstash filebeat -y
+
+
+Once installation is done.
+
+Lets configure ELK:
+
+sudo vi /etc/elasticsearch/elasticsearch.yml
+
+uncomment:
+
+    network.host : 0.0.0.0
+    xpack.security.enabled: false
+    discovery.seed_hosts: []
+
+save file and start elastic search
+
+sudo systemctl start elasticsearch
+sudo systemctl enable elasticsearch
+sudo systemctl status elasticsearch
+
+
+Testing Elasticxsearch:
+curl -X GET localhost:9200
+
+or
+Public_IP:9200
+
+
+No changes for logstash file but we can see config here:
+sudo cat /etc/logstash/logstash.yml
+
+
+Try using the sample data.
+
+cd /etc/logstash/conf.d
+
+and create logstash.conf
+
+sudo systemctl start logstash
+sudo systemctl status logstash
+
+
+
+Kibana config:
+sudo vi /etc/kibana/kibana.yml
+
+uncomment:
+    server.port: 5601
+    server.host: 0.0.0.0
+
+sudo systemctl start kibana
+sudo systemctl status kibana
+
+
+
+
+
+
+
+
+Live log
+
+Configure Filebeat:
+
+sudo vi /etc/filebeat/filebeat.yml
+
+disable elasticsearch output.
+enable logstash output
+
+sudo filebeat modules list
+
+sudo apt-get update && sudo apt-get install nginx -y
+
+sudo filebeat modules enable nginx
+
+
+go to /etc/filebeat/modules.d/
+
+sudo vi nginx.yml
+
+  access:
+    enabled: true
+    var.paths: ["/var/log/nginx/access.log*"]
+
+
+  error:
+    enabled: true
+    var.paths: ["/var/log/nginx/error.log*"]
+
+
+
+
+sudo systemctl start filebeat
+sudo systemctl enable filebeat
+sudo systemctl restart filebeat
+sudo systemctl status filebeat
+
+
+Testing Filebeat :
+curl -XGET http://ip_address:9200/_cat/indices?v
+
+
+Generate token:
+sudo /usr/share/elasticsearch/bin/elasticsearch-create-enrollment-token --scope kibana
+
+Generate Verification code:
+sudo /usr/share/kibana/bin/kibana-verification-code
+
+
+
+Default Username:
+elastic
+
+password you will get during elasticsearch installation
+
